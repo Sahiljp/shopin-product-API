@@ -9,19 +9,25 @@ import java.time.LocalDateTime;
 @Entity
 public class ProductEntity {
     @Id
-    private  String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private  Long id;
     private  String pname;
     private LocalDateTime created_on;
     private String image;
     private String brandName;
     private  String ptype;
     private String pgender;
+    private LocalDateTime lastModified_on;
+    private Integer price;
+    private String customerid;
+    private String productid;
 
-    public String getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -33,9 +39,6 @@ public class ProductEntity {
         this.productid = productid;
     }
 
-    private float price;
-    private String customerid;
-    private String productid;
 
     public String getCustomerid() {
         return customerid;
@@ -69,7 +72,7 @@ public class ProductEntity {
         this.lastModified_on = lastModified_on;
     }
 
-    private LocalDateTime lastModified_on;
+
 
     public String getPname() {
         return pname;
@@ -103,11 +106,11 @@ public class ProductEntity {
         this.pgender = pgender;
     }
 
-    public float getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
