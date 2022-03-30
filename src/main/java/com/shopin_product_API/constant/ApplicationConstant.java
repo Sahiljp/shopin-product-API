@@ -11,6 +11,7 @@ public class ApplicationConstant {
 
     // Registration
     public static final String REGISTRATION_SUCCESS = "Registration Success !";
+    public static final String PRODUCT_REGISTRATION_SUCCESS = "Product Registration Success !";
     public static final String GUEST_USER_CONVERTING_INTO_REGISTRATION_FLOW = "Guest user converting into Registration Flow !";
     public static final String REGISTRATION_EMAIL_EXISTS = "Email already exists !";
 
@@ -43,6 +44,8 @@ public class ApplicationConstant {
     public static final String OLD_PASSWORD_DOES_NOT_MATCHED = "Old password does not matched";
     public static final String PROFILE_UPLOADED_SUCESSFULLY = "Profile picture uploaded successfully !";
     public static final String PROFILE_IMAGE_SUCESSFULLY = "Profile Image Found Sucessfully !";
+    public static final String PRODUCT_IMAGE_SUCESSFULLY = "Product Image Found Sucessfully !";
+    public static final String PRODUCT_UPLOADED_SUCESSFULLY = "Product picture uploaded successfully !";
 
     public static final String EMAILPRODUCTID = "-//Microsoft Corporation//Outlook 11.0 MIMEDIR//EN";
 

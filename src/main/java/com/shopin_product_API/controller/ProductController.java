@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,11 +23,23 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-    @PostMapping("/addproduct")
-    public ResponseEntity<Map<String, String>> addProduct(@RequestBody ProductEntity productEntity){
+    @PostMapping(value = "/addproduct", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Map<String, String>> addProduct(@RequestParam(value = "productEntity") String productEntity, @RequestParam(value = "file") MultipartFile file) {
         try {
             logger.info("Inside addProduct() : ");
-            return new ResponseEntity<>(productService.addProduct(productEntity), HttpStatus.OK);
+            return new ResponseEntity<>(productService.addProduct(productEntity, file), HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Error occured while addproduct {} :Reason :{}");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
+    @GetMapping("/getProduct")
+    public ResponseEntity<Map<String, Object>> getallProduct(@RequestParam(value = "brandName", required = false) String brandName, @RequestParam(value = "productGender", required = false) String productGender, @RequestParam(value = "productName", required = false) String productName, @RequestParam(value = "productPrice", required = false) Integer productPrice) {
+        try {
+            logger.info("Inside addProduct() : ");
+            return new ResponseEntity<>(productService.getProduct(brandName, productGender, productName, productPrice), HttpStatus.OK);
 
         } catch (Exception e) {
             logger.error("Error occured while addproduct {} :Reason :{}");
