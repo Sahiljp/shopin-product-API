@@ -40,6 +40,8 @@ public class ApplicationConstant {
     public static final String USER_VERIFICATION_SUCCESS = "User verifed successfully !";
     public static final String USER_VERIFICATION_FAILURE = "User verification failed !";
     public static final String USER_EDIT_SUCCESS = "User edited successfully !";
+    public static final String PRODUCT_EDIT_SUCCESS = "Product edited successfully !";
+    public static final String PRODUCT_DELETE_SUCCESS = "Product Deleted successfully !";
     public static final String PASSWORD_EDIT_SUCCESS = "Password updated succssfully !";
     public static final String OLD_PASSWORD_DOES_NOT_MATCHED = "Old password does not matched";
     public static final String PROFILE_UPLOADED_SUCESSFULLY = "Profile picture uploaded successfully !";

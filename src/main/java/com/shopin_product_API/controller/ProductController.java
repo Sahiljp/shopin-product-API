@@ -62,11 +62,11 @@ public class ProductController {
     @PostMapping("/deleteProduct")
     public ResponseEntity<Map<String, Object>> deleteProduct(@RequestParam(value = "productid") Long productid) {
         try {
-            logger.info("Inside deleteMeeting userId : " + productid);
+            logger.info("Inside deleteProduct userId : " + productid);
             return new ResponseEntity<>(productService.deleteProduct(productid.longValue()), HttpStatus.OK);
 
         } catch (Exception e) {
-            logger.error("Error occured while deleteMeetingAPI userId {} :Reason :{}", productid, e.getMessage());
+            logger.error("Error occured while deleteProductAPI userId {} :Reason :{}", productid, e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

@@ -28,7 +28,7 @@ public class WishListServiceImpl implements WishListService {
     public WishListEntity populateProductData(ProductDto productDto){
         WishListEntity wishList=new WishListEntity();
         ProductEntity product = productRepository.findByproductid(productDto.getProductid());
-        wishList.setUserid(productDto.getUserid());
+        wishList.setUserid(productDto.getUserId());
         wishList.setProductEntity(product);
         wishList.setCreated_on(LocalDateTime.now());
 

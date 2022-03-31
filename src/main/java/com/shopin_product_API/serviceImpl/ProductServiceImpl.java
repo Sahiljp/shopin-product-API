@@ -117,7 +117,7 @@ public class ProductServiceImpl implements ProductService {
                 product.setLastModified_on(LocalDateTime.now());
                 productRepository.save(product);
                 map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
-                map.put(ApplicationConstant.RESPONSE_MESSAGE, ApplicationConstant.USER_EDIT_SUCCESS);
+                map.put(ApplicationConstant.RESPONSE_MESSAGE, ApplicationConstant.PRODUCT_EDIT_SUCCESS);
                 map.put(ApplicationConstant.RESPONSE_DATA, new ArrayList<>());
             }
         } catch (Exception e) {
@@ -135,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             productRepository.deleteById(productid);
             map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
-            map.put(ApplicationConstant.RESPONSE_MESSAGE, ApplicationConstant.PRODUCT_IMAGE_SUCESSFULLY);
+            map.put(ApplicationConstant.RESPONSE_MESSAGE, ApplicationConstant.PRODUCT_DELETE_SUCCESS);
             map.put(ApplicationConstant.RESPONSE_DATA, new ArrayList<>());
         } catch (Exception e) {
             map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_400);
