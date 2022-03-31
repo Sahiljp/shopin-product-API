@@ -24,7 +24,7 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping(value = "/addproduct", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Map<String, String>> addProduct(@RequestParam(value = "productEntity") String productEntity, @RequestParam(value = "file") MultipartFile file) {
+    public ResponseEntity<Map<String, Object>> addProduct(@RequestParam(value = "productEntity") String productEntity, @RequestParam(value = "file") MultipartFile file) {
         try {
             logger.info("Inside addProduct() : ");
             return new ResponseEntity<>(productService.addProduct(productEntity, file), HttpStatus.OK);

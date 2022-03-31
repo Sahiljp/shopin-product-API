@@ -42,32 +42,20 @@ public class ProductServiceImpl implements ProductService {
     ProductServiceClient productServiceClient;
 
     @Override
-    public Map<String, String> addProduct(String productEntity, MultipartFile file) throws StripeException, IOException {
+    public Map<String, Object> addProduct(String productEntity, MultipartFile file) throws StripeException, IOException {
         logger.info("inside addProductServiceImpl....");
         ProductEntity newProductEntity;
         ObjectMapper obbjectMapper = new ObjectMapper();
         newProductEntity = obbjectMapper.readValue(productEntity, ProductEntity.class);
-        Map<String, String> map = new HashMap<String, String>();
-        Stripe.apiKey = stripeKey;
-        Map<String, Object> params = new HashMap<>();
-        params.put("name", newProductEntity.getPname());
-        logger.info("product");
-        Product product = Product.create(params);
-        logger.info("product 234567");
-        Map<String, Object> params1 = new HashMap<>();
-        params1.put("unit_amount", 100 * newProductEntity.getPrice());
-        params1.put("currency", "INR");
-        params1.put("product", product.getId());
-        Price price = Price.create(params1);
-
-        newProductEntity.setProductid(product.getId());
+        Map<String, Object> map = new HashMap<String, Object>();
         newProductEntity.setCreated_on(LocalDateTime.now());
         newProductEntity.setLastModified_on(LocalDateTime.now());
+
         Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap("cloud_name", ApplicationConstant.CLOUD_NAME,
                 "api_key", ApplicationConstant.API_KEY, "api_secret", ApplicationConstant.API_SECRET));
         try {
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
-                    ObjectUtils.asMap("public_id", "product_image/" + newProductEntity.getProductid()));
+                    ObjectUtils.asMap("public_id", "product_image/" + newProductEntity.getPname()));
 
             String url = uploadResult.get("url").toString();
             newProductEntity.setImage(url);
@@ -83,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
 
         map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
         map.put(ApplicationConstant.RESPONSE_MESSAGE, ApplicationConstant.PRODUCT_REGISTRATION_SUCCESS);
-        map.put(ApplicationConstant.RESPONSE_DATA, price.toJson());
+        map.put(ApplicationConstant.RESPONSE_DATA, newProductEntity);
 
         productRepository.save(newProductEntity);
         return map;

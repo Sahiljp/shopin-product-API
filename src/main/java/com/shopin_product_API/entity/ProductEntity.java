@@ -19,9 +19,34 @@ public class ProductEntity {
     private String pgender;
     private LocalDateTime lastModified_on;
     private Integer price;
-    private String customerid;
-    private String productid;
+    private Long userId;
 
+    @Override
+    public String toString() {
+        return "ProductEntity{" +
+                "id=" + id +
+                ", pname='" + pname + '\'' +
+                ", created_on=" + created_on +
+                ", image='" + image + '\'' +
+                ", brandName='" + brandName + '\'' +
+                ", ptype='" + ptype + '\'' +
+                ", pgender='" + pgender + '\'' +
+                ", lastModified_on=" + lastModified_on +
+                ", price=" + price +
+                ", userId=" + userId +
+                ", qty=" + qty +
+                '}';
+    }
+
+    private Long qty;
+
+    public Long getQty() {
+        return qty;
+    }
+
+    public void setQty(Long qty) {
+        this.qty = qty;
+    }
 
     public Long getId() {
         return id;
@@ -31,22 +56,6 @@ public class ProductEntity {
         this.id = id;
     }
 
-    public String getProductid() {
-        return productid;
-    }
-
-    public void setProductid(String productid) {
-        this.productid = productid;
-    }
-
-
-    public String getCustomerid() {
-        return customerid;
-    }
-
-    public void setCustomerid(String customerid) {
-        this.customerid = customerid;
-    }
 
     public String getImage() {
         return image;
@@ -72,7 +81,13 @@ public class ProductEntity {
         this.lastModified_on = lastModified_on;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
 
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
 
     public String getPname() {
         return pname;
