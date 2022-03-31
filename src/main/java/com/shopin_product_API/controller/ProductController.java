@@ -1,5 +1,6 @@
 package com.shopin_product_API.controller;
 
+import com.shopin_product_API.entity.ProductDto;
 import com.shopin_product_API.entity.ProductEntity;
 import com.shopin_product_API.service.ProductService;
 import org.slf4j.Logger;
@@ -46,5 +47,27 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+    @PostMapping(value = "/editProduct", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Map<String, Object>> editProduct(@RequestParam("id") Long id,
+                                                           @RequestParam("productdto") String productdto, @RequestParam(value = "file") MultipartFile file) {
+        try {
+            logger.info("editProduct : " + id);
+            return new ResponseEntity<Map<String, Object>>(productService.editProduct(id ,productdto, file), HttpStatus.OK);
+        } catch (Exception e) {
+            logger.error("Error occured while editUserAPI {} :Reason :{}");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 
+    @PostMapping("/deleteProduct")
+    public ResponseEntity<Map<String, Object>> deleteProduct(@RequestParam(value = "productid") Long productid) {
+        try {
+            logger.info("Inside deleteMeeting userId : " + productid);
+            return new ResponseEntity<>(productService.deleteProduct(productid.longValue()), HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Error occured while deleteMeetingAPI userId {} :Reason :{}", productid, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
 }

@@ -12,7 +12,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     @Query("SELECT m FROM ProductEntity m WHERE m.brandName = :brandName OR m.pgender = :productGender OR m.pname = :productName OR m.price = :productPrice")
     List<ProductEntity> findByAttribute(String brandName, String productGender, String productName, Integer productPrice);
-
+    
     @Query("SELECT m FROM ProductEntity m Where m.id= :productid")
     ProductEntity findByproductid(Long productid);
+
+
 }
