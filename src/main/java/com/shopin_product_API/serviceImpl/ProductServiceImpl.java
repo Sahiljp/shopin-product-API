@@ -107,6 +107,7 @@ public class ProductServiceImpl implements ProductService {
                 product.setPgender(newProductdto.getPgender());
                 product.setPname(newProductdto.getPname());
                 product.setPrice(newProductdto.getPrice());
+                product.setQty(newProductdto.getQty());
                 Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap("cloud_name", ApplicationConstant.CLOUD_NAME,
                         "api_key", ApplicationConstant.API_KEY, "api_secret", ApplicationConstant.API_SECRET));
                 Map uploadResult = cloudinary.uploader().upload(file.getBytes(),

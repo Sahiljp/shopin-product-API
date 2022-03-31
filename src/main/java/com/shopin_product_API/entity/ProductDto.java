@@ -7,15 +7,30 @@ public class ProductDto {
     private String image;
     private String brandName;
     private String pgender;
+
+    public Long getQty() {
+        return qty;
+    }
+
+    public void setQty(Long qty) {
+        this.qty = qty;
+    }
+
     private Integer price;
     private Long userId;
+    private Long qty;
 
-    public void setProductid(Long productid) {
-        this.productid = productid;
-    }
 
     public Long getUserId() {
         return userId;
+    }
+
+    public Long getProductid() {
+        return productid;
+    }
+
+    public void setProductid(Long productid) {
+        this.productid = productid;
     }
 
     public void setUserId(Long userId) {
