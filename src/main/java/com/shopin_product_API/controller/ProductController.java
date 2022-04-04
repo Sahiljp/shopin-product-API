@@ -1,8 +1,9 @@
 package com.shopin_product_API.controller;
 
-import com.shopin_product_API.entity.ProductDto;
+import com.shopin_product_API.entity.CheckOutDto;
 import com.shopin_product_API.entity.ProductEntity;
 import com.shopin_product_API.service.ProductService;
+import com.stripe.exception.StripeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -59,7 +61,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/deleteProduct")
+    @DeleteMapping("/deleteProduct")
     public ResponseEntity<Map<String, Object>> deleteProduct(@RequestParam(value = "productid") Long productid) {
         try {
             logger.info("Inside deleteProduct userId : " + productid);
@@ -67,6 +69,16 @@ public class ProductController {
 
         } catch (Exception e) {
             logger.error("Error occured while deleteProductAPI userId {} :Reason :{}", productid, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+    @PutMapping("/updateQtyAndCartData")
+    public void updateQtyAndCartData(@RequestBody List<CheckOutDto> checkOutDto){
+        try {
+            logger.info("Inside updateQtyAndCartData() : " + checkOutDto);
+           productService.updateQtyAndCartData(checkOutDto);
+        } catch (Exception e) {
+            logger.error("Error occured while registering user {} :Reason :{}", e.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }

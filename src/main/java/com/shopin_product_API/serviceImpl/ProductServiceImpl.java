@@ -7,13 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopin_product_API.constant.ApplicationConstant;
 import com.shopin_product_API.entity.ProductDto;
 import com.shopin_product_API.entity.ProductEntity;
-import com.shopin_product_API.feign_client.ProductServiceClient;
+
+import com.shopin_product_API.entity.CheckOutDto;
+import com.shopin_product_API.entity.ProductEntity;
+
+import com.shopin_product_API.repository.CartRepository;
 import com.shopin_product_API.repository.ProductRepository;
 import com.shopin_product_API.service.ProductService;
-import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Price;
-import com.stripe.model.Product;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,11 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 @Service
 public class ProductServiceImpl implements ProductService {
     public static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
@@ -36,7 +42,10 @@ public class ProductServiceImpl implements ProductService {
     ProductRepository productRepository;
 
     @Autowired
-    ProductServiceClient productServiceClient;
+    CartRepository cartRepository;
+
+//    @Autowired
+//    ProductServiceClient productServiceClient;
 
     @Override
     public Map<String, Object> addProduct(String productEntity, MultipartFile file) throws StripeException, IOException {
@@ -145,4 +154,13 @@ public class ProductServiceImpl implements ProductService {
         return map;
     }
 
+    @Override
+    public void updateQtyAndCartData(List<CheckOutDto> checkOutDtoList) {
+        for (CheckOutDto checkOutDto: checkOutDtoList) {
+            ProductEntity productEntity = productRepository.findByproductid(checkOutDto.getProductId());
+
+            productRepository.updateQty(checkOutDto.getProductId(),productEntity.getQty()-checkOutDto.getQuantity());
+            cartRepository.removeOnCart(checkOutDto.getProductId());
+        }
+    }
 }

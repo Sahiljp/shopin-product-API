@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 
-@FeignClient(name = "user-service", url = "localhost:8080")
-public interface ProductServiceClient {
-
-    @GetMapping("/user/getUserByID/{customerid}")
-    public String getUserByID(@PathVariable("customerid") String customerid);
-}
+//@FeignClient(name = "user-service", url = "localhost:8080")
+//public interface ProductServiceClient {
+//
+//    @GetMapping("/user/getUserByID/{customerid}")
+//    public String getUserByID(@PathVariable("customerid") String customerid);
+//}
