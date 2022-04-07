@@ -1,9 +1,10 @@
 package com.shopin_product_API.controller;
 
 import com.shopin_product_API.entity.CheckOutDto;
-import com.shopin_product_API.entity.ProductEntity;
+import com.shopin_product_API.entity.ProductDto;
+import com.shopin_product_API.entity.RatingDto;
+import com.shopin_product_API.entity.RatingEntity;
 import com.shopin_product_API.service.ProductService;
-import com.stripe.exception.StripeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
 import java.util.List;
 import java.util.Map;
 
@@ -82,4 +82,17 @@ public class ProductController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
+    @PostMapping(value = "/addRatings", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Map<String, Object>> addRatings(@RequestBody RatingDto ratingDto) {
+        try {
+
+            logger.info("Inside addRatings() : ");
+            return new ResponseEntity<>(productService.addRatings(ratingDto), HttpStatus.OK);
+
+        } catch (Exception e) {
+            logger.error("Error occured while addRatings {} :Reason :{}");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+    }
+
 }
