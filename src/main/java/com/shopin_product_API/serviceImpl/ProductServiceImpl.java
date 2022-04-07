@@ -162,8 +162,10 @@ public class ProductServiceImpl implements ProductService {
     public Map<String, Object> addRatings(RatingDto ratingDto) {
         Map<String, Object> map = new HashMap<String, Object>();
         RatingEntity ratingEntity = ratingRepository.save(populateRatingData(ratingDto));
-        Integer rating=ratingRepository.getCountofrate(ratingEntity.getProductEntity().getId());
-        productRepository.addRatings(rating,ratingEntity.getProductEntity().getId());
+        RatingResponse rating=ratingRepository.getCountandAvgOfRating(ratingEntity.getProductEntity().getId());
+
+        productRepository.addRatings(rating.getCount(),rating.getAvg(),ratingEntity.getProductEntity().getId());
+
         map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
         map.put(ApplicationConstant.RESPONSE_MESSAGE, ApplicationConstant.RATING_SUCCESS);
         map.put(ApplicationConstant.RESPONSE_DATA, ratingEntity);

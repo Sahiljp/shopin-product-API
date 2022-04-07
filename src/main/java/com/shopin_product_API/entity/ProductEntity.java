@@ -21,6 +21,25 @@ public class ProductEntity {
     public ProductEntity() {
     }
 
+    private LocalDateTime lastModified_on;
+    private Integer price;
+
+    public ProductEntity(Long id, String pname, LocalDateTime created_on, String image, String brandName, String ptype, String pgender, LocalDateTime lastModified_on, Integer price, Long userId, Long rating, Double avgRating, Long qty) {
+        this.id = id;
+        this.pname = pname;
+        this.created_on = created_on;
+        this.image = image;
+        this.brandName = brandName;
+        this.ptype = ptype;
+        this.pgender = pgender;
+        this.lastModified_on = lastModified_on;
+        this.price = price;
+        this.userId = userId;
+        this.rating = rating;
+        this.avgRating = avgRating;
+        this.qty = qty;
+    }
+
     @Override
     public String toString() {
         return "ProductEntity{" +
@@ -35,16 +54,24 @@ public class ProductEntity {
                 ", price=" + price +
                 ", userId=" + userId +
                 ", rating=" + rating +
+                ", avgRating=" + avgRating +
                 ", qty=" + qty +
                 '}';
     }
 
-    private LocalDateTime lastModified_on;
-    private Integer price;
-    private Long userId;
-    private Integer rating;
+    public Double getAvgRating() {
+        return avgRating;
+    }
 
-    public ProductEntity(Long id, String pname, LocalDateTime created_on, String image, String brandName, String ptype, String pgender, LocalDateTime lastModified_on, Integer price, Long userId, Integer rating, Long qty) {
+    public void setAvgRating(Double avgRating) {
+        this.avgRating = avgRating;
+    }
+
+    private Long userId;
+    private Long rating;
+    private Double avgRating;
+
+    public ProductEntity(Long id, String pname, LocalDateTime created_on, String image, String brandName, String ptype, String pgender, LocalDateTime lastModified_on, Integer price, Long userId, Long rating, Long qty) {
         this.id = id;
         this.pname = pname;
         this.created_on = created_on;
@@ -59,11 +86,11 @@ public class ProductEntity {
         this.qty = qty;
     }
 
-    public Integer getRating() {
+    public Long getRating() {
         return rating;
     }
 
-    public void setRating(Integer rating) {
+    public void setRating(Long rating) {
         this.rating = rating;
     }
 

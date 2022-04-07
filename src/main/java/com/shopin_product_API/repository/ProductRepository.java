@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Map;
 
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
@@ -26,6 +25,9 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     @Modifying(clearAutomatically = true)
     @Transactional
-    @Query("UPDATE ProductEntity p SET p.rating = :ratingEntity WHERE p.id = :productid")
-    public void addRatings(Integer ratingEntity,Long productid);
+    @Query("UPDATE ProductEntity p SET p.rating = :ratingEntity , p.avgRating = :avg WHERE p.id = :productid")
+    public void addRatings(Long ratingEntity, Double avg, Long productid);
+
+
+
 }
