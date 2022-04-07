@@ -24,4 +24,8 @@ public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
     @Query("UPDATE ProductEntity p SET p.qty = :quantity WHERE p.id = :productId")
     public void updateQty(@Param("productId") long productId,@Param("quantity") long quantity);
 
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query("UPDATE ProductEntity p SET p.rating = :ratingEntity WHERE p.id = :productid")
+    public void addRatings(Integer ratingEntity,Long productid);
 }

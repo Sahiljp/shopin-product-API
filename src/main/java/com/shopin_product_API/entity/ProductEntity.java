@@ -17,9 +17,9 @@ public class ProductEntity {
     private String brandName;
     private  String ptype;
     private String pgender;
-    private LocalDateTime lastModified_on;
-    private Integer price;
-    private Long userId;
+
+    public ProductEntity() {
+    }
 
     @Override
     public String toString() {
@@ -34,8 +34,37 @@ public class ProductEntity {
                 ", lastModified_on=" + lastModified_on +
                 ", price=" + price +
                 ", userId=" + userId +
+                ", rating=" + rating +
                 ", qty=" + qty +
                 '}';
+    }
+
+    private LocalDateTime lastModified_on;
+    private Integer price;
+    private Long userId;
+    private Integer rating;
+
+    public ProductEntity(Long id, String pname, LocalDateTime created_on, String image, String brandName, String ptype, String pgender, LocalDateTime lastModified_on, Integer price, Long userId, Integer rating, Long qty) {
+        this.id = id;
+        this.pname = pname;
+        this.created_on = created_on;
+        this.image = image;
+        this.brandName = brandName;
+        this.ptype = ptype;
+        this.pgender = pgender;
+        this.lastModified_on = lastModified_on;
+        this.price = price;
+        this.userId = userId;
+        this.rating = rating;
+        this.qty = qty;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     private Long qty;

@@ -12,6 +12,7 @@ public class ApplicationConstant {
     // Response Status Code
     public static final String STATUS_200 = "200";
     public static final String STATUS_400 = "400";
+    public static final String RATING_SUCCESS = "RATING  successfully !";
 
     // Response Format
     public static final String RESPONSE_STATUS = "Status";

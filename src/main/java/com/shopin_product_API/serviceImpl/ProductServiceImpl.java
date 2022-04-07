@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -84,19 +84,17 @@ public class ProductServiceImpl implements ProductService {
     public Map<String, Object> getProduct(String brandName, String productGender, String productName, Integer productPrice) {
         Map<String, Object> map = new HashMap<String, Object>();
         List<ProductEntity> product = productRepository.findByAttribute(brandName, productGender, productName, productPrice);
-
+      //  Map<String, Object> map1 = new HashMap<String, Object>();
         if (!product.isEmpty()) {
             map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
             map.put(ApplicationConstant.RESPONSE_DATA, product);
             return map;
         } else {
             List<ProductEntity> product1 = productRepository.findAll();
-            product1.stream().map(i-> ratingRepository.getCountofrate(i.getId())).forEach(i->map.put("rating",i.intValue()));
             map.put(ApplicationConstant.RESPONSE_DATA, product1);
             map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
             return map;
         }
-
     }
 
     @Override
@@ -164,6 +162,8 @@ public class ProductServiceImpl implements ProductService {
     public Map<String, Object> addRatings(RatingDto ratingDto) {
         Map<String, Object> map = new HashMap<String, Object>();
         RatingEntity ratingEntity = ratingRepository.save(populateRatingData(ratingDto));
+        Integer rating=ratingRepository.getCountofrate(ratingEntity.getProductEntity().getId());
+        productRepository.addRatings(rating,ratingEntity.getProductEntity().getId());
         map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
         map.put(ApplicationConstant.RESPONSE_MESSAGE, ApplicationConstant.RATING_SUCCESS);
         map.put(ApplicationConstant.RESPONSE_DATA, ratingEntity);
