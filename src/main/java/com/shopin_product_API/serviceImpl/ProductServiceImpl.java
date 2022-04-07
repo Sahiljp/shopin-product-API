@@ -5,14 +5,10 @@ import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shopin_product_API.constant.ApplicationConstant;
-import com.shopin_product_API.entity.ProductDto;
-import com.shopin_product_API.entity.ProductEntity;
-
-import com.shopin_product_API.entity.CheckOutDto;
-import com.shopin_product_API.entity.ProductEntity;
-
+import com.shopin_product_API.entity.*;
 import com.shopin_product_API.repository.CartRepository;
 import com.shopin_product_API.repository.ProductRepository;
+import com.shopin_product_API.repository.RatingRepository;
 import com.shopin_product_API.service.ProductService;
 import com.stripe.exception.StripeException;
 import org.slf4j.Logger;
@@ -23,14 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-
 import java.time.LocalDateTime;
 import java.util.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -43,6 +38,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     CartRepository cartRepository;
+
+    @Autowired
+    RatingRepository ratingRepository;
 
 //    @Autowired
 //    ProductServiceClient productServiceClient;
@@ -57,11 +55,9 @@ public class ProductServiceImpl implements ProductService {
         newProductEntity.setCreated_on(LocalDateTime.now());
         newProductEntity.setLastModified_on(LocalDateTime.now());
 
-        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap("cloud_name", ApplicationConstant.CLOUD_NAME,
-                "api_key", ApplicationConstant.API_KEY, "api_secret", ApplicationConstant.API_SECRET));
+        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap("cloud_name", ApplicationConstant.CLOUD_NAME, "api_key", ApplicationConstant.API_KEY, "api_secret", ApplicationConstant.API_SECRET));
         try {
-            Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
-                    ObjectUtils.asMap("public_id", "product_image/" + newProductEntity.getPname()));
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("public_id", "product_image/" + newProductEntity.getPname()));
 
             String url = uploadResult.get("url").toString();
             newProductEntity.setImage(url);
@@ -88,21 +84,23 @@ public class ProductServiceImpl implements ProductService {
     public Map<String, Object> getProduct(String brandName, String productGender, String productName, Integer productPrice) {
         Map<String, Object> map = new HashMap<String, Object>();
         List<ProductEntity> product = productRepository.findByAttribute(brandName, productGender, productName, productPrice);
+
         if (!product.isEmpty()) {
             map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
             map.put(ApplicationConstant.RESPONSE_DATA, product);
             return map;
         } else {
             List<ProductEntity> product1 = productRepository.findAll();
-            map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
+            product1.stream().map(i-> ratingRepository.getCountofrate(i.getId())).forEach(i->map.put("rating",i.intValue()));
             map.put(ApplicationConstant.RESPONSE_DATA, product1);
+            map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
             return map;
         }
 
     }
 
     @Override
-    public Map<String, Object> editProduct(Long id , String productdto, MultipartFile file) throws JsonProcessingException {
+    public Map<String, Object> editProduct(Long id, String productdto, MultipartFile file) throws JsonProcessingException {
         Optional<ProductEntity> productEntity = productRepository.findById(id);
         Map<String, Object> map = new HashMap<String, Object>();
         ProductDto newProductdto;
@@ -117,10 +115,8 @@ public class ProductServiceImpl implements ProductService {
                 product.setPname(newProductdto.getPname());
                 product.setPrice(newProductdto.getPrice());
                 product.setQty(newProductdto.getQty());
-                Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap("cloud_name", ApplicationConstant.CLOUD_NAME,
-                        "api_key", ApplicationConstant.API_KEY, "api_secret", ApplicationConstant.API_SECRET));
-                Map uploadResult = cloudinary.uploader().upload(file.getBytes(),
-                        ObjectUtils.asMap("public_id", "product_image/" +newProductdto.getPname()));
+                Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap("cloud_name", ApplicationConstant.CLOUD_NAME, "api_key", ApplicationConstant.API_KEY, "api_secret", ApplicationConstant.API_SECRET));
+                Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap("public_id", "product_image/" + newProductdto.getPname()));
                 String url = uploadResult.get("url").toString();
                 product.setImage(url);
                 product.setLastModified_on(LocalDateTime.now());
@@ -156,11 +152,32 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void updateQtyAndCartData(List<CheckOutDto> checkOutDtoList) {
-        for (CheckOutDto checkOutDto: checkOutDtoList) {
+        for (CheckOutDto checkOutDto : checkOutDtoList) {
             ProductEntity productEntity = productRepository.findByproductid(checkOutDto.getProductId());
 
-            productRepository.updateQty(checkOutDto.getProductId(),productEntity.getQty()-checkOutDto.getQuantity());
+            productRepository.updateQty(checkOutDto.getProductId(), productEntity.getQty() - checkOutDto.getQuantity());
             cartRepository.removeOnCart(checkOutDto.getProductId());
         }
+    }
+
+    @Override
+    public Map<String, Object> addRatings(RatingDto ratingDto) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        RatingEntity ratingEntity = ratingRepository.save(populateRatingData(ratingDto));
+        map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
+        map.put(ApplicationConstant.RESPONSE_MESSAGE, ApplicationConstant.RATING_SUCCESS);
+        map.put(ApplicationConstant.RESPONSE_DATA, ratingEntity);
+
+        return map;
+    }
+
+    public RatingEntity populateRatingData(RatingDto ratingDto) {
+        RatingEntity ratingEntity = new RatingEntity();
+        ratingEntity.setRating(ratingDto.getRating());
+        ratingEntity.setComments(ratingDto.getComments());
+        ratingEntity.setUserId(ratingDto.getUserId());
+        ratingEntity.setProductEntity(ratingDto.getProductEntity());
+
+        return ratingEntity;
     }
 }
