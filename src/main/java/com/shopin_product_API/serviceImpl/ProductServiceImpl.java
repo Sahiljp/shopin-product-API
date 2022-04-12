@@ -163,13 +163,10 @@ public class ProductServiceImpl implements ProductService {
         Map<String, Object> map = new HashMap<String, Object>();
         RatingEntity ratingEntity = ratingRepository.save(populateRatingData(ratingDto));
         RatingResponse rating=ratingRepository.getCountandAvgOfRating(ratingEntity.getProductEntity().getId());
-
         productRepository.addRatings(rating.getCount(),rating.getAvg(),ratingEntity.getProductEntity().getId());
-
         map.put(ApplicationConstant.RESPONSE_STATUS, ApplicationConstant.STATUS_200);
         map.put(ApplicationConstant.RESPONSE_MESSAGE, ApplicationConstant.RATING_SUCCESS);
         map.put(ApplicationConstant.RESPONSE_DATA, ratingEntity);
-
         return map;
     }
 
@@ -179,7 +176,6 @@ public class ProductServiceImpl implements ProductService {
         ratingEntity.setComments(ratingDto.getComments());
         ratingEntity.setUserId(ratingDto.getUserId());
         ratingEntity.setProductEntity(ratingDto.getProductEntity());
-
         return ratingEntity;
     }
 }
